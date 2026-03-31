@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import NavbarSocial from '@/components/NavbarSocial';
 import ProfileCardSocial from '@/components/ProfileCardSocial';

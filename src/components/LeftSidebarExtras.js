@@ -31,7 +31,12 @@ export default function LeftSidebarExtras() {
       {/* Alert Box */}
       <div className="bg-[#dfebd0] text-[#4d636f] px-4 py-4 rounded-sm shadow-sm relative md:flex items-center justify-between hidden">
         <span><strong>Hey!</strong><br />People are looking at your profile. Find out who.</span>
-        <button className="hover:text-black absolute top-2 right-2"><i className="fa fa-remove"></i></button>
+        <button 
+          className="hover:text-black absolute top-2 right-2"
+          onClick={(e) => e.currentTarget.parentElement.style.display = 'none'}
+        >
+          <i className="fa fa-remove">✖</i>
+        </button>
       </div>
     </>
   );

@@ -60,6 +60,7 @@ export default function PortfolioPage() {
   // =====================================================================
   // 4. LOGIC: BẢNG GIÁ & MODAL SIGN UP
   // =====================================================================
+  const [isSignUpSuccess, setIsSignUpSuccess] = useState(false);
   const packages = [
     { id: 'basic', name: 'Basic', price: 10, storage: '1GB', support: 'Mail Support', headerColor: 'bg-black' },
     { id: 'pro', name: 'Pro', price: 25, storage: '50GB', support: 'Endless Support', headerColor: 'bg-[#009688]' },
@@ -76,11 +77,10 @@ export default function PortfolioPage() {
   };
 
   const handleSignUpSubmit = (e) => {
-    e.preventDefault();
-    alert('Cám ơn bạn đã đăng kí dịch vụ.');
-    setIsSignUpModalOpen(false);
-    setSignUpEmail('');
-  };
+  e.preventDefault();
+  setIsSignUpModalOpen(false);
+  setIsSignUpSuccess(true);
+};
 
   // =====================================================================
   // 5. LOGIC: FORM LIÊN HỆ & MODAL HIỂN THỊ
@@ -165,21 +165,19 @@ export default function PortfolioPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             {currentItems.length > 0 ? (
               currentItems.map(item => (
-                <div key={item.id} className="group relative overflow-hidden rounded-xl shadow-sm hover:shadow-xl transition-all duration-300">
+                <div key={item.id} className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
   
-  {/* IMAGE */}
-  <img 
-    src={item.image} 
-    alt={item.title} 
-    className="w-full h-[200px] object-cover transform group-hover:scale-110 transition duration-500"
-  />
+  {/* IMAGE + OVERLAY */}
+  <div className="relative group">
+    <img 
+      src={item.image} 
+      alt={item.title} 
+      className="w-full h-[200px] object-cover transition duration-500 group-hover:scale-110"
+    />
 
-  {/* OVERLAY */}
-  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-end p-4">
-    
-    {/* TAG */}
+    {/* TAG góc trên */}
     <span className={`
-      text-xs px-2 py-1 rounded w-fit mb-2 text-white
+      absolute top-3 left-3 text-xs px-2 py-1 rounded text-white shadow
       ${item.category === 'Design' ? 'bg-blue-500' : ''}
       ${item.category === 'Photos' ? 'bg-green-500' : ''}
       ${item.category === 'Art' ? 'bg-pink-500' : ''}
@@ -187,13 +185,14 @@ export default function PortfolioPage() {
       {item.category}
     </span>
 
-    {/* TITLE */}
-    <h3 className="text-white font-bold text-lg leading-tight">
-      {item.title}
-    </h3>
+    {/* OVERLAY nhẹ */}
+    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition duration-300"></div>
+  </div>
 
-    {/* DESC */}
-    <p className="text-gray-200 text-sm mt-1 line-clamp-2">
+  {/* CONTENT (LUÔN HIỂN THỊ) */}
+  <div className="p-4">
+    <h3 className="font-bold text-lg">{item.title}</h3>
+    <p className="text-sm text-gray-500 mt-2 line-clamp-2">
       {item.desc}
     </p>
   </div>
@@ -379,6 +378,37 @@ export default function PortfolioPage() {
           </div>
         </div>
       )}
+      {isSignUpSuccess && (
+  <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
+    <div className="bg-white p-8 rounded-lg w-full max-w-md shadow-2xl">
+      
+      <div className="text-center mb-6">
+        <i className="fa fa-check-circle text-5xl text-green-500 mb-4"></i>
+        <h2 className="text-2xl font-bold text-gray-800">
+          Đăng ký thành công!
+        </h2>
+        <p className="text-gray-500 mt-2">
+          Bạn đã đăng ký gói: 
+          <strong className="text-black"> {selectedPackage?.name}</strong>
+        </p>
+        <p className="text-sm text-gray-500 mt-1">
+          Email: {signUpEmail}
+        </p>
+      </div>
+
+      <button
+        onClick={() => {
+          setIsSignUpSuccess(false);
+          setSignUpEmail('');
+        }}
+        className="w-full py-3 bg-black text-white hover:bg-gray-800 transition-colors rounded font-semibold"
+      >
+        Đóng
+      </button>
+
+    </div>
+  </div>
+)}
 
       {/* ================= MODAL THÔNG BÁO LIÊN HỆ ================= */}
       {isContactModalOpen && (

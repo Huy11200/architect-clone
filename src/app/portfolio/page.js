@@ -165,13 +165,39 @@ export default function PortfolioPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             {currentItems.length > 0 ? (
               currentItems.map(item => (
-                <div key={item.id} className="bg-white">
-                  <img src={item.image} alt={item.title} className="w-full hover:opacity-80 transition-opacity cursor-pointer" />
-                  <div className="p-4 bg-white">
-                    <h3 className="font-bold text-lg">{item.title}</h3>
-                    <p className="text-sm text-gray-500 mt-3">{item.desc}</p>
-                  </div>
-                </div>
+                <div key={item.id} className="group relative overflow-hidden rounded-xl shadow-sm hover:shadow-xl transition-all duration-300">
+  
+  {/* IMAGE */}
+  <img 
+    src={item.image} 
+    alt={item.title} 
+    className="w-full h-[200px] object-cover transform group-hover:scale-110 transition duration-500"
+  />
+
+  {/* OVERLAY */}
+  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-end p-4">
+    
+    {/* TAG */}
+    <span className={`
+      text-xs px-2 py-1 rounded w-fit mb-2 text-white
+      ${item.category === 'Design' ? 'bg-blue-500' : ''}
+      ${item.category === 'Photos' ? 'bg-green-500' : ''}
+      ${item.category === 'Art' ? 'bg-pink-500' : ''}
+    `}>
+      {item.category}
+    </span>
+
+    {/* TITLE */}
+    <h3 className="text-white font-bold text-lg leading-tight">
+      {item.title}
+    </h3>
+
+    {/* DESC */}
+    <p className="text-gray-200 text-sm mt-1 line-clamp-2">
+      {item.desc}
+    </p>
+  </div>
+</div>
               ))
             ) : (
               <p className="text-gray-500 italic col-span-3">Không có dự án nào.</p>

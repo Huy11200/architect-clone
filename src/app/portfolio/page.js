@@ -1,36 +1,48 @@
 'use client';
 
-import { useState } from 'react';
+
+import { useState, useEffect } from 'react';
+
 
 export default function PortfolioPage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [portfolio, setPortfolio] = useState([]); // dữ liệu thật
+  const [isLoading, setIsLoading] = useState(true);
+
 
   // =====================================================================
-  // 1 & 2. LOGIC: DỮ LIỆU PORTFOLIO, LỌC VÀ PHÂN TRANG
+  // 🔥 THÊM FETCH API
   // =====================================================================
-  const initialPortfolio = [
-    { id: 1, category: 'Design', title: 'Lorem Ipsum', desc: 'Praesent tincidunt sed tellus ut rutrum.', image: 'https://www.w3schools.com/w3images/mountains.jpg' },
-    { id: 2, category: 'Photos', title: 'Lorem Ipsum', desc: 'Praesent tincidunt sed tellus ut rutrum.', image: 'https://www.w3schools.com/w3images/lights.jpg' },
-    { id: 3, category: 'Art', title: 'Lorem Ipsum', desc: 'Praesent tincidunt sed tellus ut rutrum.', image: 'https://www.w3schools.com/w3images/nature.jpg' },
-    { id: 4, category: 'Design', title: 'Lorem Ipsum 2', desc: 'Sed vitae justo condimentum.', image: 'https://www.w3schools.com/w3images/p1.jpg' },
-    { id: 5, category: 'Photos', title: 'Lorem Ipsum 2', desc: 'Sed vitae justo condimentum.', image: 'https://www.w3schools.com/w3images/p2.jpg' },
-    { id: 6, category: 'Art', title: 'Lorem Ipsum 2', desc: 'Sed vitae justo condimentum.', image: 'https://www.w3schools.com/w3images/p3.jpg' },
-  ];
+  useEffect(() => {
+    fetch('http://localhost:3005/photos')
+      .then(res => res.json())
+      .then(data => {
+        setPortfolio(data);
+        setIsLoading(false);
+      })
+      .catch(err => console.log(err));
+  }, []);
 
+  // =====================================================================
+  // 1 & 2. LOGIC: LỌC VÀ PHÂN TRANG
+  // =====================================================================
   const [activeFilter, setActiveFilter] = useState('ALL');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
 
   const filteredItems = activeFilter === 'ALL' 
-    ? initialPortfolio 
-    : initialPortfolio.filter(item => item.category === activeFilter);
+    ? portfolio 
+    : portfolio.filter(item => item.category === activeFilter);
 
   const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
-  const currentItems = filteredItems.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  const currentItems = filteredItems.slice(
+    (currentPage - 1) * itemsPerPage, 
+    currentPage * itemsPerPage
+  );
 
   const handleFilterClick = (filter) => {
     setActiveFilter(filter);
-    setCurrentPage(1); // Reset về trang 1 khi lọc
+    setCurrentPage(1);
   };
 
   const scrollToSection = (id) => {

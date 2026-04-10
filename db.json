@@ -1,0 +1,45 @@
+{  "photos": [
+    {
+      "id": 1,
+      "category": "Design",
+      "title": "Lorem Ipsum",
+      "desc": "Praesent tincidunt sed tellus ut rutrum.",
+      "image": "https://www.w3schools.com/w3images/mountains.jpg"
+    },
+    {
+      "id": 2,
+      "category": "Photos",
+      "title": "Lorem Ipsum",
+      "desc": "Praesent tincidunt sed tellus ut rutrum.",
+      "image": "https://www.w3schools.com/w3images/lights.jpg"
+    },
+    {
+      "id": 3,
+      "category": "Art",
+      "title": "Lorem Ipsum",
+      "desc": "Praesent tincidunt sed tellus ut rutrum.",
+      "image": "https://www.w3schools.com/w3images/nature.jpg"
+    },
+    {
+      "id": 4,
+      "category": "Design",
+      "title": "Lorem Ipsum 2",
+      "desc": "Sed vitae justo condimentum.",
+      "image": "https://www.w3schools.com/w3images/p1.jpg"
+    },
+    {
+      "id": 5,
+      "category": "Photos",
+      "title": "Lorem Ipsum 2",
+      "desc": "Sed vitae justo condimentum.",
+      "image": "https://www.w3schools.com/w3images/p2.jpg"
+    },
+    {
+      "id": 6,
+      "category": "Art",
+      "title": "Lorem Ipsum 2",
+      "desc": "Sed vitae justo condimentum.",
+      "image": "https://www.w3schools.com/w3images/p3.jpg"
+    }
+  ]
+}

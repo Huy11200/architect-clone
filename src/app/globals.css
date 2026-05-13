@@ -1,8 +1,12 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #222222;
+  --foreground: #ffffff;
+  --card-bg: #333333;
+  --card-shadow: rgba(0, 0, 0, 0.4);
 }
 
 @theme inline {
@@ -12,15 +16,120 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
 }
 
-body {
+html, body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* W3.CSS Paper Card Design */
+.w3-card {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  background: var(--card-bg);
+  color: var(--foreground);
+}
+
+.w3-card-4 {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  background: var(--card-bg);
+  color: var(--foreground);
+}
+
+.w3-container {
+  padding: 16px;
+}
+
+a { 
+  color: #b3d9ff;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #ffffff;
+}
+
+h1, h2, h3, h4, h5, h6 { 
+  letter-spacing: 0.03em;
+  font-weight: normal;
+}
+
+h1 { font-size: 36px; }
+h2 { font-size: 30px; }
+h3 { font-size: 24px; }
+
+/* Utility Classes */
+.sepia { filter: sepia(0.25); }
+.grayscale { filter: grayscale(1); }
+
+/* Buttons */
+button, .button, input[type="button"], input[type="submit"] {
+  background: #404040;
+  color: #ffffff;
+  border: 1px solid #555555;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  transition: all 0.3s;
+}
+
+button:hover, .button:hover, input[type="button"]:hover, input[type="submit"]:hover {
+  background: #555555;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* Input Fields */
+input[type="text"], 
+input[type="email"], 
+input[type="password"], 
+input[type="number"], 
+textarea, 
+select {
+  background: #404040;
+  color: #ffffff;
+  border: 1px solid #555555;
+  padding: 8px 12px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 16px;
+}
+
+input[type="text"]:focus, 
+input[type="email"]:focus, 
+input[type="password"]:focus, 
+input[type="number"]:focus, 
+textarea:focus, 
+select:focus {
+  background: #505050;
+  border: 1px solid #888888;
+  outline: none;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table, th, td {
+  border: 1px solid #555555;
+}
+
+th {
+  background: #404040;
+  color: #ffffff;
+  padding: 12px;
+}
+
+td {
+  padding: 12px;
+  background: #333333;
+}
+
+tr:nth-child(odd) td {
+  background: #2a2a2a;
 }

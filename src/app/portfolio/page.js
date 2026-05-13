@@ -1,90 +1,209 @@
 'use client';
 
-
-import { useState, useEffect } from 'react';
-
+import { useState } from 'react';
+import Navbar from '@/components/Navbar';
 
 export default function PortfolioPage() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [portfolio, setPortfolio] = useState([]); // dữ liệu thật
-  const [isLoading, setIsLoading] = useState(true);
-
-
-  // =====================================================================
-  // 🔥 THÊM FETCH API
-  // =====================================================================
-  useEffect(() => {
-    fetch('http://localhost:3005/photos')
-      .then(res => res.json())
-      .then(data => {
-        setPortfolio(data);
-        setIsLoading(false);
-      })
-      .catch(err => console.log(err));
-  }, []);
-
-  // =====================================================================
-  // 1 & 2. LOGIC: LỌC VÀ PHÂN TRANG
-  // =====================================================================
   const [activeFilter, setActiveFilter] = useState('ALL');
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 3;
+
+  const portfolioItems = [
+    { id: 1, title: 'Project Alpha', category: 'DESIGN', img: 'https://www.w3schools.com/w3images/house2.jpg' },
+    { id: 2, title: 'Project Beta', category: 'PHOTOGRAPHY', img: 'https://www.w3schools.com/w3images/house3.jpg' },
+    { id: 3, title: 'Project Gamma', category: 'DESIGN', img: 'https://www.w3schools.com/w3images/house4.jpg' },
+    { id: 4, title: 'Project Delta', category: 'PHOTOGRAPHY', img: 'https://www.w3schools.com/w3images/house5.jpg' },
+    { id: 5, title: 'Project Epsilon', category: 'DESIGN', img: 'https://www.w3schools.com/w3images/house2.jpg' },
+    { id: 6, title: 'Project Zeta', category: 'PRINT', img: 'https://www.w3schools.com/w3images/house3.jpg' },
+  ];
 
   const filteredItems = activeFilter === 'ALL' 
-    ? portfolio 
-    : portfolio.filter(item => item.category === activeFilter);
+    ? portfolioItems 
+    : portfolioItems.filter(item => item.category === activeFilter);
 
-  const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
-  const currentItems = filteredItems.slice(
-    (currentPage - 1) * itemsPerPage, 
-    currentPage * itemsPerPage
-  );
-
-  const handleFilterClick = (filter) => {
-    setActiveFilter(filter);
-    setCurrentPage(1);
-  };
-
-  const scrollToSection = (id) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-      setIsMobileMenuOpen(false);
-    }
-  };
-
-  // =====================================================================
-  // 3. LOGIC: TECHNICAL SKILLS RANDOMIZE
-  // =====================================================================
-  const [skills, setSkills] = useState([
-    { id: 1, name: 'Photography', percent: 95 },
-    { id: 2, name: 'Web Design', percent: 85 },
-    { id: 3, name: 'Photoshop', percent: 80 },
-  ]);
-
-  const randomizeSkills = () => {
-    setSkills(skills.map(skill => ({
-      ...skill,
-      percent: Math.floor(Math.random() * 101) // Random 0 - 100
-    })));
-  };
-
-  // =====================================================================
-  // 4. LOGIC: BẢNG GIÁ & MODAL SIGN UP
-  // =====================================================================
-  const [isSignUpSuccess, setIsSignUpSuccess] = useState(false);
-  const packages = [
-    { id: 'basic', name: 'Basic', price: 10, storage: '1GB', support: 'Mail Support', headerColor: 'bg-black' },
-    { id: 'pro', name: 'Pro', price: 25, storage: '50GB', support: 'Endless Support', headerColor: 'bg-[#009688]' },
-    { id: 'premium', name: 'Premium', price: 25, storage: 'Unlimited', support: 'Endless Support', headerColor: 'bg-[#616161]' },
+  const skills = [
+    { name: 'Photography', percent: 95 },
+    { name: 'Web Design', percent: 85 },
+    { name: 'Graphic Design', percent: 80 },
+    { name: 'UI/UX', percent: 88 },
   ];
-  
-  const [selectedPackage, setSelectedPackage] = useState(null);
-  const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
-  const [signUpEmail, setSignUpEmail] = useState('');
 
-  const handleSignUpClick = (pkg) => {
-    setSelectedPackage(pkg);
+  const packages = [
+    { name: 'Basic', price: 10, features: ['1GB Storage', 'Email Support', 'Basic Analytics'] },
+    { name: 'Pro', price: 25, features: ['50GB Storage', 'Priority Support', 'Advanced Analytics'], highlight: true },
+    { name: 'Premium', price: 50, features: ['Unlimited Storage', '24/7 Support', 'Full Analytics'] },
+  ];
+
+  return (
+    <div className="bg-[#222222] min-h-screen text-white font-sans">
+      <Navbar />
+
+      <main className="max-w-[1200px] mx-auto pt-[80px] pb-10 px-6">
+
+        {/* Portfolio Section */}
+        <section id="portfolio" className="mb-20">
+          <h2 className="text-4xl font-light tracking-[8px] mb-2">PORTFOLIO</h2>
+          <div className="h-1 w-16 bg-[#555555] mb-10"></div>
+
+          {/* Filter Buttons */}
+          <div className="flex flex-wrap gap-3 mb-12">
+            {['ALL', 'DESIGN', 'PHOTOGRAPHY', 'PRINT'].map((filter) => (
+              <button
+                key={filter}
+                onClick={() => setActiveFilter(filter)}
+                className={`px-6 py-2 text-sm uppercase tracking-wide font-normal transition ${
+                  activeFilter === filter
+                    ? 'bg-white text-black'
+                    : 'bg-[#404040] text-white hover:bg-[#555555]'
+                }`}
+              >
+                {filter}
+              </button>
+            ))}
+          </div>
+
+          {/* Portfolio Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {filteredItems.map((item) => (
+              <div key={item.id} className="w3-card shadow-lg overflow-hidden group cursor-pointer">
+                <div className="relative overflow-hidden h-[250px]">
+                  <img
+                    src={item.img}
+                    alt={item.title}
+                    className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                  />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition duration-300 flex items-center justify-center">
+                    <p className="text-white text-center text-sm font-normal opacity-0 group-hover:opacity-100 transition">{item.category}</p>
+                  </div>
+                </div>
+                <div className="p-4 bg-[#333333]">
+                  <h4 className="text-lg font-normal">{item.title}</h4>
+                  <p className="text-xs text-[#aaaaaa] mt-1">{item.category}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* About Section */}
+        <section id="about" className="mb-20">
+          <h2 className="text-4xl font-light tracking-[8px] mb-2">ABOUT</h2>
+          <div className="h-1 w-16 bg-[#555555] mb-10"></div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            {/* About Text */}
+            <div>
+              <p className="text-base text-[#cccccc] leading-relaxed mb-6">
+                I am a passionate creative professional with over 10 years of experience in design and photography. My work focuses on creating meaningful visual experiences that connect with audiences.
+              </p>
+              <p className="text-base text-[#cccccc] leading-relaxed">
+                I specialize in modern design principles, innovative photography, and comprehensive branding solutions. Let me help bring your vision to life.
+              </p>
+            </div>
+
+            {/* Skills */}
+            <div>
+              <h3 className="text-2xl font-light tracking-wide mb-6">TECHNICAL SKILLS</h3>
+              {skills.map((skill, index) => (
+                <div key={index} className="mb-6">
+                  <div className="flex justify-between mb-2">
+                    <p className="text-sm font-normal text-[#cccccc]">{skill.name}</p>
+                    <p className="text-sm text-[#aaaaaa]">{skill.percent}%</p>
+                  </div>
+                  <div className="w-full bg-[#404040] h-2 rounded overflow-hidden">
+                    <div 
+                      className="bg-[#555555] h-full transition-all"
+                      style={{ width: `${skill.percent}%` }}
+                    ></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Pricing Section */}
+        <section className="mb-20">
+          <h2 className="text-4xl font-light tracking-[8px] mb-2">PRICING</h2>
+          <div className="h-1 w-16 bg-[#555555] mb-10"></div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {packages.map((pkg, index) => (
+              <div 
+                key={index} 
+                className={`w3-card shadow-lg overflow-hidden transition transform ${pkg.highlight ? 'md:scale-105' : ''}`}
+              >
+                <div className={`${pkg.highlight ? 'bg-white text-black' : 'bg-[#404040] text-white'} p-6 text-center`}>
+                  <h4 className="text-2xl font-normal mb-2">{pkg.name}</h4>
+                  <p className="text-3xl font-light">${pkg.price}</p>
+                  <p className="text-xs mt-2 opacity-75">/month</p>
+                </div>
+                <div className="bg-[#333333] p-6">
+                  <ul className="space-y-3">
+                    {pkg.features.map((feature, fIndex) => (
+                      <li key={fIndex} className="text-sm text-[#cccccc] flex items-start">
+                        <span className="mr-3">✓</span>
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <button className={`w-full mt-6 py-2 px-4 text-sm font-normal uppercase tracking-wide transition ${
+                    pkg.highlight 
+                      ? 'bg-white text-black hover:bg-[#cccccc]' 
+                      : 'bg-[#404040] text-white hover:bg-[#555555]'
+                  }`}>
+                    Get Started
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Contact Section */}
+        <section id="contact" className="mb-20">
+          <h2 className="text-4xl font-light tracking-[8px] mb-2">CONTACT</h2>
+          <div className="h-1 w-16 bg-[#555555] mb-10"></div>
+
+          <div className="max-w-2xl">
+            <p className="text-base text-[#cccccc] mb-8">
+              I'd love to hear from you. Feel free to reach out with any inquiries or collaboration opportunities.
+            </p>
+
+            <form className="space-y-4">
+              <input 
+                type="text" 
+                placeholder="Your Name" 
+                className="w-full bg-[#404040] border border-[#555555] text-white p-4 focus:border-[#888888] focus:outline-none transition"
+              />
+              <input 
+                type="email" 
+                placeholder="Your Email" 
+                className="w-full bg-[#404040] border border-[#555555] text-white p-4 focus:border-[#888888] focus:outline-none transition"
+              />
+              <textarea 
+                placeholder="Your Message" 
+                rows="6"
+                className="w-full bg-[#404040] border border-[#555555] text-white p-4 focus:border-[#888888] focus:outline-none transition resize-none"
+              ></textarea>
+              <button 
+                type="submit"
+                className="bg-white text-black py-3 px-8 font-normal uppercase tracking-wide text-sm hover:bg-[#cccccc] transition"
+              >
+                Send Message
+              </button>
+            </form>
+          </div>
+        </section>
+
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-black text-white text-center py-8 border-t border-[#555555]">
+        <p className="text-sm text-[#aaaaaa]">Powered by <a href="#" className="text-[#b3d9ff] hover:text-white">w3.css</a></p>
+        <p className="text-xs text-[#999999] mt-2">© 2026 Portfolio. All rights reserved.</p>
+      </footer>
+    </div>
+  );
+}
     setIsSignUpModalOpen(true);
   };
 
@@ -211,7 +330,7 @@ export default function PortfolioPage() {
 </div>
               ))
             ) : (
-              <p className="text-gray-500 italic col-span-3">Không có dự án nào.</p>
+              <p className="text-gray-500 italic col-span-3">Loading...</p>
             )}
           </div>
 
